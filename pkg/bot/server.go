@@ -16,6 +16,8 @@ type Server struct {
 }
 
 func CreateServer() *Server {
+	conf := loadConfig()
+
 	e := echo.New()
 	s := &Server{
 		e: e,
@@ -24,7 +26,9 @@ func CreateServer() *Server {
 	e.Use(middleware.Recover())
 
 	g := e.Group("/bot")
-	g.Use(echo.WrapMiddleware(fromCron))
+	if conf.Env == "prod" {
+		g.Use(echo.WrapMiddleware(fromCron))
+	}
 	g.GET("/tweet", s.tweet)
 	return s
 }
