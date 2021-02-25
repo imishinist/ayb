@@ -25,12 +25,26 @@ func CreateServer() *Server {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
+	api := e.Group("/api")
+	api.GET("/tweets", s.tweetList)
+
 	g := e.Group("/bot")
 	if conf.Env == "prod" {
 		g.Use(echo.WrapMiddleware(fromCron))
 	}
 	g.GET("/tweet", s.tweet)
 	return s
+}
+
+func (s *Server) tweetList(c echo.Context) error {
+	ws := witticism.Get()
+	type response struct {
+		Tweets witticism.Witticisms `json:"tweets"`
+	}
+
+	return c.JSON(http.StatusOK, &response{
+		Tweets: ws,
+	})
 }
 
 func (s *Server) tweet(c echo.Context) error {
