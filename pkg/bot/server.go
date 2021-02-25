@@ -8,6 +8,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 
 	"github.com/imishinist/ayb/pkg/bot/twitter"
+	"github.com/imishinist/ayb/pkg/witticism"
 )
 
 type Server struct {
@@ -23,7 +24,7 @@ func CreateServer() *Server {
 	e.Use(middleware.Recover())
 
 	g := e.Group("/bot")
-	// g.Use(echo.WrapMiddleware(fromCron))
+	g.Use(echo.WrapMiddleware(fromCron))
 	g.GET("/tweet", s.tweet)
 	return s
 }
@@ -38,13 +39,17 @@ func (s *Server) tweet(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	client.Tweet("test")
+	w := witticism.Get()
+	if err := client.Tweet(w.Random().Text); err != nil {
+		return err
+	}
 
 	type response struct {
 		Message string `json:"message"`
 	}
-	r := new(response)
-	r.Message = "OK"
+	r := &response{
+		Message: "OK",
+	}
 	return c.JSON(http.StatusOK, r)
 }
 
