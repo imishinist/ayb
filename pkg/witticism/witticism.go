@@ -1,7 +1,6 @@
 package witticism
 
 import (
-	_ "embed"
 	"encoding/json"
 	"log"
 	"math/rand"
@@ -16,9 +15,7 @@ type Witticism struct {
 type Witticisms []Witticism
 
 var (
-	//go:embed witticism.json
-	witticismJson []byte
-	witticisms    *Witticisms
+	witticisms *Witticisms
 
 	once sync.Once
 )
