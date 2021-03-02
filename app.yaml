@@ -1,0 +1,14 @@
+runtime: go115
+
+env_variables:
+
+main: ./pkg/handler/ayb
+
+automatic_scaling:
+  max_idle_instances: 1
+  min_idle_instances: automatic
+  target_cpu_utilization: 0.8
+  target_throughput_utilization: 0.8
+  max_concurrent_requests: 60
+  min_pending_latency: 3000ms
+  max_pending_latency: automatic
