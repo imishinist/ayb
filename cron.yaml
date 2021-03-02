@@ -1,0 +1,4 @@
+cron:
+  - description: "bot tweet"
+    url: /bot/tweet
+    schedule: every 6 hours
