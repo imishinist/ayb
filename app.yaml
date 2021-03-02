@@ -1,6 +1,7 @@
 runtime: go115
 
 env_variables:
+  ENV: prod
 
 main: ./pkg/handler/ayb
 
