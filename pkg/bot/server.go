@@ -1,6 +1,7 @@
 package bot
 
 import (
+	"log"
 	"net/http"
 	"os"
 
@@ -58,9 +59,11 @@ func (s *Server) tweet(c echo.Context) error {
 		return err
 	}
 	w := witticism.Get()
-	if err := client.Tweet(w.Random().Text); err != nil {
+	tweetText := w.Random().Text
+	if err := client.Tweet(tweetText); err != nil {
 		return err
 	}
+	log.Println(tweetText)
 
 	type response struct {
 		Message string `json:"message"`
