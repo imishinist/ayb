@@ -3,7 +3,6 @@ package bot
 import (
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -13,15 +12,15 @@ import (
 )
 
 type Server struct {
-	e *echo.Echo
+	e    *echo.Echo
+	conf *Config
 }
 
 func CreateServer() *Server {
-	conf := loadConfig()
-
 	e := echo.New()
 	s := &Server{
-		e: e,
+		e:    e,
+		conf: loadConfig(),
 	}
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
@@ -30,7 +29,7 @@ func CreateServer() *Server {
 	api.GET("/tweets", s.tweetList)
 
 	g := e.Group("/bot")
-	if conf.Env == "prod" {
+	if s.conf.Env == "prod" {
 		g.Use(echo.WrapMiddleware(fromCron))
 	}
 	g.GET("/tweet", s.tweet)
@@ -50,10 +49,10 @@ func (s *Server) tweetList(c echo.Context) error {
 
 func (s *Server) tweet(c echo.Context) error {
 	client, err := twitter.GetClient(&twitter.Credentials{
-		AccessToken:       os.Getenv("ACCESS_TOKEN"),
-		AccessTokenSecret: os.Getenv("ACCESS_TOKEN_SECRET"),
-		ConsumerKey:       os.Getenv("CONSUMER_KEY"),
-		ConsumerSecret:    os.Getenv("CONSUMER_SECRET"),
+		AccessToken:       s.conf.AccessToken,
+		AccessTokenSecret: s.conf.AccessTokenSecret,
+		ConsumerKey:       s.conf.ConsumerKey,
+		ConsumerSecret:    s.conf.ConsumerSecret,
 	})
 	if err != nil {
 		return err
