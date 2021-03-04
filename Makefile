@@ -15,4 +15,4 @@ generate:
 .PHONY: deploy
 deploy:
 	@gomplate -f app.yaml.tmpl | tee app.yaml && \
-	gcloud app deploy || rm app.yaml
+	gcloud app deploy; rm app.yaml

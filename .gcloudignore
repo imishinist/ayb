@@ -23,4 +23,13 @@
 *.test
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+bin/*
+.env*
+
 pkg/witticism/witticism_go116.go
+
+Makefile
+README.md
+app.yaml.tmpl
+cron.yaml
