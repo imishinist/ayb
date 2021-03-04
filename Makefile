@@ -11,3 +11,8 @@ build/http:
 .PHONY: generate
 generate:
 	cd pkg/witticism/ && statik -m -src=. -include="*.json"
+
+.PHONY: deploy
+deploy:
+	@gomplate -f app.yaml.tmpl | tee app.yaml && \
+	gcloud app deploy || rm app.yaml

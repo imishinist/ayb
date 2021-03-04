@@ -2,6 +2,10 @@ runtime: go115
 
 env_variables:
   ENV: prod
+  ACCESS_TOKEN: {{ .Env.ACCESS_TOKEN }}
+  ACCESS_TOKEN_SECRET: {{ .Env.ACCESS_TOKEN_SECRET }}
+  CONSUMER_KEY: {{ .Env.CONSUMER_KEY }}
+  CONSUMER_SECRET: {{ .Env.CONSUMER_SECRET }}
 
 main: ./pkg/handler/ayb
 
